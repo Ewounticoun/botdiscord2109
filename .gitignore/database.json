@@ -1,0 +1,64 @@
+{
+  "histoires": [
+    {
+      "story_value": "ceci est un autre test",
+      "story_author": "<@403929320231403520>"
+    },
+    {
+      "story_value": "",
+      "story_author": "<@403929320231403520>"
+    },
+    {
+      "story_value": "Un escargot n'avance pas vite au beau jour",
+      "story_author": "<@403929320231403520>"
+    },
+    {
+      "story_value": "Un lapin tua un chasseur XD c drole !!!",
+      "story_author": "<@403929320231403520>"
+    }
+  ],
+  "xp": [
+    {
+      "user": "403929320231403520",
+      "xp": 246
+    },
+    {
+      "user": "447063802178043914",
+      "xp": 139
+    },
+    {
+      "user": "367665024485031936",
+      "xp": 22
+    },
+    {
+      "user": "451828408347787264",
+      "xp": 59
+    },
+    {
+      "user": "444154884103864320",
+      "xp": 4
+    }
+  ],
+  "inventory": [
+    {
+      "user": "403929320231403520",
+      "items": "Frite de mémé , Frite de mémé , Frite de mémé , Smylet class , Smylet class , Smylet class"
+    },
+    {
+      "user": "451828408347787264",
+      "items": "Passage Modo , Passage Modo , Passage Modo , Passage Modo , Passage Modo , Passage Modo , Passage Modo , Passage Modo , Passage Modo , Passage Modo , Passage Modo"
+    },
+    {
+      "user": "447063802178043914",
+      "items": "Smylet class"
+    },
+    {
+      "user": "367665024485031936",
+      "items": "vide"
+    },
+    {
+      "user": "444154884103864320",
+      "items": "vide"
+    }
+  ]
+}
