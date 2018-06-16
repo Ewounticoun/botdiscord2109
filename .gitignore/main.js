@@ -5,6 +5,7 @@ const adapter = new FileSync('database.json')
 const storeadapter = new FileSync('store.json');
 const db = low(adapter);
 const storedb = low(storeadapter);
+const Google = require('./commands/google').default
 
 db.defaults({ histoires: [], xp: [], inventory: []}).write()
 
@@ -13,13 +14,15 @@ var prefix = ("/")
 var randnum = 0;
 
 var storynumber = db.get('histoires').map('story_value').value();
-
+var dispatcher;
 bot.on('ready', () =>{
     console.log("Bot Ready !");
 
 }); 
 
 bot.on('message', function (message){
+
+
     
     var msgauthor = message.author.id;
 
@@ -34,7 +37,7 @@ bot.on('message', function (message){
         console.log(userxp);
         console.log(`Nombre d'xp : ${userxp[1]}`)
 
-        db.get("xp").find({user: msgauthor}).assign({user: msgauthor, xp: userxp[1] += 1}).write();
+       // db.get("xp").find({user: msgauthor}).assign({user: msgauthor, xp: userxp[1] += 1}).write();
 
     }
 
@@ -49,7 +52,7 @@ bot.on('message', function (message){
 
         db.get("xp").find({user: msgauthor}).assign({user: msgauthor, xp: userxp[1] += 1}).write();
 
-    }
+    }    
 
     if (message.content === 'Très bien et toi'){
         random();
@@ -64,7 +67,7 @@ bot.on('message', function (message){
             message.reply('Pas très bien, merci de te soucier de moi !');
          }
     }
-    if (message.content === "Oui et toi"){
+    if (message.content === "Je vais bien et toi"){
         random();
 
         if (randnum == 1){
@@ -81,11 +84,14 @@ bot.on('message', function (message){
     if (message.content === 'Bonjour'){
         message.reply('Bonjour, comment ça va ?')
     }
+    if (message.content === 'Rappel'){
+        message.channel.sendMessage('***Abonne Toi a la chaine Youtube : EDMG - Snake.***\n\nRejoint les sur twiter :@edmg_snake_yt\nEt sur Instagram : edmg_snake_yt')
+    }
     if (message.content === 'Salut'){
         message.reply('Salut, ça va ?')
     } 
     if (message.content === prefix + "help"){
-        message.channel.sendMessage("Voici les commandes du bot : \n\n/xpstat : Pour voir où en sont tes XP\n/store : Pour afficher le Store\n/buyitem (ID de l'item) : Pour acheter un item du shop\n/ban @... : Pour banir un membre inférieur qui insulte (Attention ne pas bannir sans raison car risque de bannissement)\n/kick @... : Pour Kick un membre inférieur qui le mérite (Attention ne pas kick sans raison car risque de bannissement)  \n\nJe peux vous répondre lorsque vous marquez : \n-Bonjour\n-Salut\n-Oui et toi \n-Très bien et toi")
+        message.channel.sendMessage("Voici les commandes du bot : \n\n/xpstat : Pour voir où en sont tes XP\n/stats : Pour voir ses stats plus précisement (inventaire, xp,...)\n/store : Pour afficher le Store\n/buyitem (ID de l'item) : Pour acheter un item du shop\n/ban @... : Pour banir un membre inférieur qui insulte (Attention ne pas bannir sans raison car risque de bannissement)\n/kick @... : Pour Kick un membre inférieur qui le mérite (Attention ne pas kick sans raison car risque de bannissement)  \n\nJe peux vous répondre lorsque vous marquez : \n-Bonjour\n-Salut\n-Je vais bien et toi \n-Très bien et toi")
     }
 
     if (message.content === "ping"){
@@ -221,19 +227,29 @@ bot.on('message', function (message){
                         }else{
                             message.reply("Erreur ! Achat impossible, nombre d'xp insuffisant !");
                         }
-                }
+                }  
             }
 
-
+  
         break;
 
-        case "buyitem item0001":
+        case "stats":
 
-        if (userxp[1] >= iteminfo[3]){
-            msgauthor.setroles(['Modérateur !']).then(console.log).catch(console.error);
-        }
+            var userXpDB = db.get("xp").filter({user: msgauthor}).find("xp").value();
+            var userXP = Object.values(userXpDB);
+            var inventoryDb = db.get("inventory").filter({user: msgauthor}).find("items").value();
+            var inventory = Object.values(inventoryDb);
+            var userCreateDate = message.author.createdAt.toString().split(' ');
 
-        
+            var stats_embed = new Discord.RichEmbed()
+                .setTitle(`Stats Utilisateur : ${message.author.username}`)
+                .addField("XP", `${userXP[1]} XP`, true)
+                .addField("User ID", msgauthor, true)
+                .addField("Inventaire", inventory[1])
+                .addField("Date de création de l'utilisateur", userCreateDate[1] + ' ' + userCreateDate[2] + ', ' + userCreateDate[3])
+                .setThumbnail(message.author.avatarURL)
+                
+            message.author.send({embed: stats_embed});   
         
         break;
 
@@ -248,6 +264,7 @@ bot.on('message', function (message){
             .addField("XP :", `${xpfinal[1]} xp`)
             message.channel.send({embed: xp_embed});
     }
+    
 })
 
 bot.on('guildMemberAdd', function (member) {
@@ -260,7 +277,71 @@ bot.on('ready', function () {
     bot.user.setActivity('/help pour obtenir mes commandes').catch(console.error)
 })
 
-bot.login('NDUxMzM4Nzg2MzcxMjcyNzE2.DfBTbw.VeX60_7Nm1KMdg41GDce4ZJsiFs');
+function sendError(message, description){
+      message.channel.send({embed: {
+          color: 15158332,
+          description: ':x:' + description
+      }});
+  }
+  
+  bot.on('message', message => {
+      if(message.content[0] === prefix) {
+          let splitMessage = message.content.split(" ");
+          if(splitMessage[0] === '!play') {
+              if(splitMessage.length === 2)
+              {
+                  if(message.member.voiceChannel)
+                  {
+                      message.member.voiceChannel.join().then(connection => {
+                          dispatcher = connection.playArbitraryInput(splitMessage[1]);
+  
+                          dispatcher.on('error', e => {
+                              console.log(e);
+                          });
+                          dispatcher.on('end', e => {
+                              dispatcher = undefined;
+                              console.log('Fin du son');
+                          });
+                      }).catch(console.log);
+                  }
+                  else
+                  sendError(message, "Erreur, vous devez d'abord rejoindre un canal vocal ;)");
+              }
+              else 
+              sendError(message, 'Erreur, problème dans les paramètre');
+          }
+          else if(splitMessage[0] === '!pause'){
+              if(dispatcher !== undefined)
+            dispatcher.pause();
+         }
+         else if(splitMessage[0] === '!resume'){
+             if(dispatcher !== undefined)
+              dispatcher.resume();
+         }
+     }
+  })
+  
+ // bot.on('message', function(msg) {
+      
+   //   if(message.content[0] === prefix) {
+       //   if(msg.content === prefix + 'buyitem item0001'){
+            //  let role = msg.guild.roles.find('name', 'Modérateur !')
+           //   if(msg.member.roles.find('name', 'Modérateur !')){
+           //       msg.member.removeRole(role)
+          //        msg.reply("Désoler il ne faut pas l'acheter 2 fois car sinon sa retir le role.")
+          //    }
+          //    else{
+          //        msg.member.addRole(role)
+        //          msg.reply('Voila vous avez bien obtenu le role Moderateur !')
+         //     }
+     //     }
+      //}
+  
+     // })
+
+bot.login('NDU1MTE2MDM2NTkzOTQyNTM5.Df3TXQ.DAqTxaaYswrEFk80x1O6DrWPF0o');
+
+
 
 function random(min, max) {
     min = Math.ceil(0);
