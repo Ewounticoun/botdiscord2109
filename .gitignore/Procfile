@@ -1,1 +1,1 @@
-worker : node_index
+worker : node_main
