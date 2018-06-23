@@ -284,42 +284,42 @@ function sendError(message, description){
       }});
   }
   
-  bot.on('message', message => {
-      if(message.content[0] === prefix) {
-          let splitMessage = message.content.split(" ");
-          if(splitMessage[0] === '!play') {
-              if(splitMessage.length === 2)
-              {
-                  if(message.member.voiceChannel)
-                  {
-                      message.member.voiceChannel.join().then(connection => {
-                          dispatcher = connection.playArbitraryInput(splitMessage[1]);
-  
-                          dispatcher.on('error', e => {
-                              console.log(e);
-                          });
-                          dispatcher.on('end', e => {
-                              dispatcher = undefined;
-                              console.log('Fin du son');
-                          });
-                      }).catch(console.log);
-                  }
-                  else
-                  sendError(message, "Erreur, vous devez d'abord rejoindre un canal vocal ;)");
-              }
-              else 
-              sendError(message, 'Erreur, problème dans les paramètre');
-          }
-          else if(splitMessage[0] === '!pause'){
-              if(dispatcher !== undefined)
-            dispatcher.pause();
-         }
-         else if(splitMessage[0] === '!resume'){
-             if(dispatcher !== undefined)
-              dispatcher.resume();
-         }
-     }
-  })
+  //bot.on('message', message => {
+   //   if(message.content[0] === prefix) {
+    //      let splitMessage = message.content.split(" ");
+    //      if(splitMessage[0] === '!play') {
+      //        if(splitMessage.length === 2)
+       //       {
+        //          if(message.member.voiceChannel)
+        //          {
+         //             message.member.voiceChannel.join().then(connection => {
+          //                dispatcher = connection.playArbitraryInput(splitMessage[1]);
+  //
+       //     //              dispatcher.on('error', e => {
+        //                      console.log(e);
+           //               });
+           //               dispatcher.on('end', e => {
+           //                  dispatcher = undefined;
+           //                   console.log('Fin du son');
+          //                });
+          //            }).catch(console.log);
+         //         }
+        //          else
+          //        sendError(message, "Erreur, vous devez d'abord rejoindre un canal vocal ;)");
+          //    }
+          //    else 
+          //    sendError(message, 'Erreur, problème dans les paramètre');
+        //  }
+       //   else if(splitMessage[0] === '!pause'){
+      //        if(dispatcher !== undefined)
+     //       dispatcher.pause();
+     //    }
+     //    else if(splitMessage[0] === '!resume'){
+        //     if(dispatcher !== undefined)
+         //     dispatcher.resume();
+   //      }
+  //   }
+  //})
   
  // bot.on('message', function(msg) {
       
@@ -339,7 +339,7 @@ function sendError(message, description){
   
      // })
 
-bot.login('NDU1MTE2MDM2NTkzOTQyNTM5.Df3TXQ.DAqTxaaYswrEFk80x1O6DrWPF0o');
+bot.login('NDU5NDk1ODkyMDc2OTg2MzY5.Dg3S1A.lvC-gq7Bi9BqcV-foLhli8TLICw');
 
 
 
