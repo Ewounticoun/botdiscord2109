@@ -2,7 +2,7 @@
   "name": "botdiscord2109",
   "version": "1.0.0",
   "description": "bot pour le serveur discord de la chaine youtube",
-  "main": "main.js",
+  "index": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
