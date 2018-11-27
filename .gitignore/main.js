@@ -339,7 +339,7 @@ function sendError(message, description){
   
      // })
 
-bot.login('NDU5NDk1ODkyMDc2OTg2MzY5.Dg3S1A.lvC-gq7Bi9BqcV-foLhli8TLICw');
+bot.login(process.env.TOKEN);
 
 
 
