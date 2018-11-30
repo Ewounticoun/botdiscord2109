@@ -2,9 +2,9 @@
   "name": "botdiscord2109",
   "version": "1.0.0",
   "description": "bot pour le serveur discord de la chaine youtube",
-  "index": "index.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "keywords": [
     "blabla"
